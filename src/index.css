@@ -1,0 +1,17 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-color: #ff7750;
+  --error-message-color: #dc3545;
+  --cancel-color: #676767;
+  --secondary-color: #146eb4;
+
+}
+
+.Toastify__toast-container {
+    z-index: 999999 !important;
+}
