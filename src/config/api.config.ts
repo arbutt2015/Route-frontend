@@ -10,4 +10,6 @@ export const API_ENDPOINTS = {
   DOMAIN_BRANDING: "/client-domains/get-by-domain-url",
   PROFILE: "/users/me",
   CHANGE_PASSWORD: "/auth/change-password",
+  GET_ASSIGNED_PROJECT: "/project/get-assigned-project",
+  ASSIGN_DEMO_PROJECT: "/auth/assign-demo-project",
 } as const;

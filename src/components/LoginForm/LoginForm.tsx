@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { loginFormValidationSchema } from "../../validations/validation";
 import { loginAPI } from "../../api/auth";
+import { getAssignedProjects } from "../../api/projects";
 import Loader from "../../components/Loader/Loader";
 import WebStorage from "../../utils/WebStorage";
 import { useState } from "react";
@@ -43,7 +44,25 @@ const LoginForm = () => {
             issuedAt: Date.now(),
           });
           handleSetLoggedInUser(response.data.user);
-          navigate(ROUTE_NAMES.BASE_PATH, { replace: true });
+          WebStorage.setLocalStore("showModal", "true");
+          const res = await getAssignedProjects();
+          if (res.success && res.data) {
+            WebStorage.setLocalStore(
+              "anyUserAssignedProject",
+              res.data.length > 0,
+            );
+            const user = response.data.user;
+            const isNewUser =
+              !user.usersAccess &&
+              !user.createProjectAccess &&
+              !user.assetsAccess &&
+              res.data.length === 0;
+            WebStorage.setLocalStore("isNewUser", isNewUser);
+          }
+          navigate(ROUTE_NAMES.BASE_PATH, {
+            replace: true,
+            state: { showProjects: true },
+          });
         } else {
           if (response.data?.type === errorType.NOT_VERIFIED) {
             WebStorage.setLocalStore("email", values.email);

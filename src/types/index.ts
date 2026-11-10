@@ -89,6 +89,39 @@ export interface DomainBranding {
   favIcon?: string;
 }
 
+export interface ISelectedProject {
+  agencyName: string;
+  projectId: number;
+  projectName: string;
+  projectNumber: string;
+  projectS3BucketFolderPath: string;
+  geoJsonS3FilePath: string;
+  boundingBox: string[];
+  regions: unknown;
+  projectKmlGeoJson: string;
+  isExportable?: boolean;
+  projectDataExportUrl?: string;
+  isEnableLens: boolean;
+  isEnablePlanner: boolean;
+  isEnableAnalytics: boolean;
+  roadViewEnabled?: boolean;
+  viewerEnabled?: boolean;
+}
+
+export interface ReturnProject {
+  project: ISelectedProject;
+  projectUserRoleId: number;
+  roleId: number;
+  isEnableLens: boolean;
+  isEnablePlanner: boolean;
+  isEnableAnalytics: boolean;
+}
+
+export interface IProjectModalProps {
+  show: boolean;
+  handleClose: () => void;
+}
+
 export enum MapType {
   ROAD_MAP = "roadmap",
   TERRAIN = "terrain",

@@ -4,9 +4,12 @@ import WebStorage from "./WebStorage";
 import { ROUTE_NAMES } from "./constant";
 
 export const logoutUser = () => {
-  WebStorage.removeAuthToken();
-  localStorage.removeItem("user");
-  localStorage.removeItem("email");
+  localStorage.clear();
+  document.cookie.split(";").forEach((c) => {
+    document.cookie = c
+      .replace(/^ +/, "")
+      .replace(/=.*/, `=;expires=${new Date().toUTCString()};path=/`);
+  });
   window.location.replace(ROUTE_NAMES.LOGIN);
 };
 

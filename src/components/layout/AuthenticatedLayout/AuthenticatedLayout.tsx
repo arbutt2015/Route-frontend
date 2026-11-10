@@ -1,9 +1,10 @@
-import { lazy, Suspense, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { lazy, Suspense, useCallback, useState } from "react";
+import { Outlet, useOutletContext } from "react-router-dom";
 import { logoutUser } from "../../../utils/helper";
 import "@fontsource/source-sans-pro/latin-400.css";
 import "@fontsource/source-sans-pro/latin-600.css";
 import useAppState from "../../../hooks/useAppState";
+import { ProjectModal } from "../../ProjectsModal/ProjectModal";
 import {
   AuthenticatedHeader,
   AuthenticatedHeaderProps,
@@ -16,15 +17,25 @@ const UpdateProfile = lazy(() =>
   })),
 );
 
+export interface AuthenticatedOutletContext {
+  openProjectModal: () => void;
+}
+
+export const useAuthenticatedOutletContext = () =>
+  useOutletContext<AuthenticatedOutletContext>();
+
 type AuthenticatedLayoutProps = Pick<AuthenticatedHeaderProps, "actions">;
 
-export const AuthenticatedLayout = (props: AuthenticatedLayoutProps) => {
+export const AuthenticatedLayout = ({ actions }: AuthenticatedLayoutProps) => {
   const { user } = useAppState();
   const [profileOpen, setProfileOpen] = useState(false);
+  const [projectModalOpen, setProjectModalOpen] = useState(false);
   const userName =
     [user?.firstName, user?.lastName].filter(Boolean).join(" ") ||
     user?.email ||
     "User";
+
+  const openProjectModal = useCallback(() => setProjectModalOpen(true), []);
 
   return (
     <ApplicationShell>
@@ -32,15 +43,21 @@ export const AuthenticatedLayout = (props: AuthenticatedLayoutProps) => {
         userName={userName}
         onUpdateProfile={() => setProfileOpen(true)}
         onLogout={logoutUser}
-        {...props}
+        actions={{ open: openProjectModal, ...actions }}
       />
       <PageContent id="main-content">
-        <Outlet />
+        <Outlet context={{ openProjectModal }} />
       </PageContent>
       {profileOpen && (
         <Suspense fallback={null}>
           <UpdateProfile onClose={() => setProfileOpen(false)} />
         </Suspense>
+      )}
+      {projectModalOpen && (
+        <ProjectModal
+          show={projectModalOpen}
+          handleClose={() => setProjectModalOpen(false)}
+        />
       )}
     </ApplicationShell>
   );

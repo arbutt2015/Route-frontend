@@ -8,10 +8,10 @@ import minusIcon from "../../assets/images/minu-road-view.png";
 
 const defaultProps = {
   center: {
-    lat: 41.5,
-    lng: -110.2,
+    lat: 38.5,
+    lng: -98.0,
   },
-  zoom: 7,
+  zoom: 6,
 };
 
 const mapOptions = {
@@ -19,6 +19,7 @@ const mapOptions = {
   mapTypeControl: true,
   zoomControl: true,
   tilt: 0,
+  styles: [{ stylers: [{ saturation: -100 }] }],
 };
 
 export const Map = () => {
@@ -26,7 +27,6 @@ export const Map = () => {
   const mapsRef = useRef<typeof google.maps | null>(null);
   const [center] = useState(defaultProps.center);
   const [zoom, setZoom] = useState(defaultProps.zoom);
-  const [mapType, setMapType] = useState<MapType>(MapType.HYBRID);
 
   const handleApiLoaded = ({
     map,
@@ -53,7 +53,7 @@ export const Map = () => {
         bootstrapURLKeys={{ key: environment.googleMapApiKey }}
         defaultCenter={defaultProps.center}
         defaultZoom={defaultProps.zoom}
-        options={{ ...mapOptions, mapTypeId: mapType }}
+        options={{ ...mapOptions, mapTypeId: MapType.ROAD_MAP }}
         yesIWantToUseGoogleMapApiInternals
         onGoogleApiLoaded={handleApiLoaded}
         draggable={true}
@@ -67,20 +67,6 @@ export const Map = () => {
         </button>
         <button onClick={zoomOut} className="active-map-btn" disabled={zoom <= 0}>
           <img src={minusIcon} />
-        </button>
-      </div>
-      <div className="dashboard-map-type-btn">
-        <button
-          onClick={() => setMapType(MapType.TERRAIN)}
-          className={mapType === MapType.TERRAIN ? "active-map-btn" : ""}
-        >
-          Map
-        </button>
-        <button
-          onClick={() => setMapType(MapType.HYBRID)}
-          className={mapType === MapType.HYBRID ? "active-map-btn" : ""}
-        >
-          Satellite
         </button>
       </div>
     </MapContainer>
