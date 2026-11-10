@@ -1,7 +1,6 @@
 import "./App.css";
 import AppRoutes from "./routes/AppRoutes";
 import routeLogo from "./assets/images/logo.png";
-import DisableZoom from "./components/DisableZoom/DisableZoom";
 import { useEffect } from "react";
 import { getDomainByUrlApi } from "./api/dashboard";
 import useAppState from "./hooks/useAppState";
@@ -49,21 +48,7 @@ const App = () => {
     getDomainInfo();
   }, []);
 
-  return (
-    <>
-      <div className="for-small-device">
-        <img src={domainInfo?.logo} alt="Transconomy Logo" className="logo-image-for-small-device" />
-        <p className="message-for-small-device">
-          To access {domainInfo?.companyName} Route, please access the {domainInfo?.companyName} Route website using
-          a desktop browser on your computer.
-        </p>
-      </div>
-      <div className="for-large-device">
-        <DisableZoom />
-        <AppRoutes />
-      </div>
-    </>
-  );
+  return <AppRoutes />;
 };
 
 export default App;

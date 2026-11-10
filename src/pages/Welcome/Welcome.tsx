@@ -1,24 +1,28 @@
-import Button from "react-bootstrap/Button";
-import { logoutUser } from "../../utils/helper";
-import useAppState from "../../hooks/useAppState";
+import styled from "styled-components";
+import mapImage from "../../assets/images/screen5-colorado-map.png";
 
-const Welcome = () => {
-  const { user } = useAppState();
+const MapCanvas = styled.section`
+  position: relative;
+  flex: 1;
+  min-height: calc(100dvh - var(--header-height));
+  overflow: hidden;
+  background: #ededed;
 
-  return (
-    <div className="welcome-page" style={{ padding: "40px" }}>
-      <h1>Welcome to Route</h1>
-      <p>Your application is up and running.</p>
-      {user && (
-        <p>
-          Signed in as {user.firstName} {user.lastName} ({user.email})
-        </p>
-      )}
-      <Button variant="primary" onClick={logoutUser} style={{ backgroundColor: "var(--primary-color)", border: "none" }}>
-        Sign Out
-      </Button>
-    </div>
-  );
-};
+  img {
+    position: absolute;
+    left: -38.735%;
+    top: calc(-1 * var(--header-height));
+    width: 161.8%;
+    height: calc(100% + var(--header-height));
+    max-width: none;
+    object-fit: fill;
+  }
+`;
+
+const Welcome = () => (
+  <MapCanvas aria-label="Colorado route planning map preview">
+    <img src={mapImage} alt="Map of Colorado centered on Denver and Colorado Springs" />
+  </MapCanvas>
+);
 
 export default Welcome;

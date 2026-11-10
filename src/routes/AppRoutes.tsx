@@ -7,6 +7,7 @@ import { ForgotPasswordForm } from "../pages/Forgot/ForgotPassword";
 import { ForgotPasswordRequestForm } from "../pages/ForgotRequest/ForgotPasswordRequest";
 import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
 import Welcome from "../pages/Welcome/Welcome";
+import { AuthenticatedLayout } from "../components/layout/AuthenticatedLayout";
 
 const AppRoutes = () => {
   return (
@@ -18,7 +19,9 @@ const AppRoutes = () => {
         <Route path={ROUTE_NAMES.FORGOT_PASSWORD} element={<ForgotPasswordForm />} />
         <Route path={ROUTE_NAMES.REQUEST_PASSWORD_RESET} element={<ForgotPasswordRequestForm />} />
         <Route element={<ProtectedRoute />}>
-          <Route path={ROUTE_NAMES.BASE_PATH} element={<Welcome />} />
+          <Route element={<AuthenticatedLayout />}>
+            <Route path={ROUTE_NAMES.BASE_PATH} element={<Welcome />} />
+          </Route>
         </Route>
       </Routes>
     </Router>
