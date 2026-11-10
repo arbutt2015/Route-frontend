@@ -18,5 +18,6 @@ if (
 export const environment = Object.freeze({
   apiBaseUrl: apiUrl.href.replace(/\/+$/, ""),
   authCookieDomain: import.meta.env.VITE_AUTH_COOKIE_DOMAIN?.trim() ?? "",
+  googleMapApiKey: import.meta.env.VITE_GOOGLE_MAP_API_KEY?.trim() ?? "",
   isDevelopment: import.meta.env.DEV,
 });

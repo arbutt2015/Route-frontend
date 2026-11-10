@@ -88,3 +88,10 @@ export interface DomainBranding {
   companyName?: string;
   favIcon?: string;
 }
+
+export enum MapType {
+  ROAD_MAP = "roadmap",
+  TERRAIN = "terrain",
+  SATELLITE = "satellite",
+  HYBRID = "hybrid",
+}
