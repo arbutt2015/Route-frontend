@@ -1,29 +1,46 @@
+import Dropdown from "react-bootstrap/Dropdown";
 import profileIcon from "../../../assets/icons/user-profile.svg";
 import { HeaderLogo } from "./HeaderLogo";
 import { HeaderActions, HeaderActionHandlers } from "./HeaderActions";
-import { Header, ProfileButton } from "./AuthenticatedLayout.style";
+import {
+  Header,
+  ProfileButton,
+  ProfileMenu,
+} from "./AuthenticatedLayout.style";
 
 export interface AuthenticatedHeaderProps {
   userName: string;
   actions?: HeaderActionHandlers;
-  onProfileClick?: () => void;
+  onUpdateProfile: () => void;
+  onLogout: () => void;
 }
 
 export const AuthenticatedHeader = ({
   userName,
   actions,
-  onProfileClick,
+  onUpdateProfile,
+  onLogout,
 }: AuthenticatedHeaderProps) => (
   <Header>
     <HeaderLogo />
     <HeaderActions actions={actions} />
-    <ProfileButton
-      type="button"
-      aria-label={`User profile: ${userName}`}
-      onClick={onProfileClick}
-    >
-      <img src={profileIcon} alt="" aria-hidden="true" />
-      <span>{userName}</span>
-    </ProfileButton>
+    <ProfileMenu align="end">
+      <Dropdown.Toggle
+        as={ProfileButton}
+        id="profile-menu"
+        aria-label={`User profile: ${userName}`}
+      >
+        <img src={profileIcon} alt="" aria-hidden="true" />
+        <span>{userName}</span>
+      </Dropdown.Toggle>
+      <Dropdown.Menu role="menu">
+        <Dropdown.Item as="button" role="menuitem" onClick={onUpdateProfile}>
+          Update profile
+        </Dropdown.Item>
+        <Dropdown.Item as="button" role="menuitem" onClick={onLogout}>
+          Logout
+        </Dropdown.Item>
+      </Dropdown.Menu>
+    </ProfileMenu>
   </Header>
 );

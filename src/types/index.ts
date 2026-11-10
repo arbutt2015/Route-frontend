@@ -21,10 +21,27 @@ export interface LoggedInUser {
   middleInitial?: string;
   lastName: string;
   companyName?: string;
+  title?: string;
+  phoneNumber?: string;
   usersAccess?: boolean;
   createProjectAccess?: boolean;
   assetsAccess?: boolean;
   isPasswordChangeRequired?: boolean;
+}
+
+export interface ProfileValues {
+  firstName: string;
+  middleInitial: string;
+  lastName: string;
+  companyName: string;
+  title: string;
+  phoneNumber: string;
+}
+
+export interface UserProfile extends ProfileValues {
+  userId: number;
+  email: string;
+  isPasswordChangeRequired: boolean;
 }
 
 export interface AuthToken {
@@ -53,7 +70,12 @@ export interface ApiErrorData {
 
 export type ApiResult<T = unknown> =
   | { success: true; data: T; message: string }
-  | { success: false; data: ApiErrorData | null; message: string };
+  | {
+      success: false;
+      data: ApiErrorData | null;
+      message: string;
+      statusCode?: number;
+    };
 
 export interface DomainInfo {
   logo: string;

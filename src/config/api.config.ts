@@ -8,4 +8,6 @@ export const API_ENDPOINTS = {
   RESET_PASSWORD: "/auth/confirm-forgot-password",
   REFRESH_TOKEN: "/auth/refresh-token",
   DOMAIN_BRANDING: "/client-domains/get-by-domain-url",
+  PROFILE: "/users/me",
+  CHANGE_PASSWORD: "/auth/change-password",
 } as const;

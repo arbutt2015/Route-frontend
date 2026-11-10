@@ -1,4 +1,5 @@
-import { toast } from "react-toastify";
+import type { ReactNode } from "react";
+import { toast, type ToastPosition } from "react-toastify";
 
 export const ROUTE_NAMES = {
   BASE_PATH: "/",
@@ -15,12 +16,65 @@ export const errorType = {
   NOT_VERIFIED: "UserNotConfirmedException",
 } as const;
 
-export const toastErrMessage = (message: string) => {
+type ToastMessage = string | ReactNode;
+
+export const toastErrMessage = (
+  message: ToastMessage,
+  position: ToastPosition | undefined = "bottom-center",
+  hideProgressBar: boolean = true,
+  closeOnClick: boolean = true,
+  pauseOnHover: boolean = true,
+  draggable: boolean = true,
+  autoClose: number = 2500,
+): void => {
   toast.error(message, {
-    position: "bottom-center",
-    hideProgressBar: true,
-    autoClose: 2500,
-    toastId: "request-error",
+    position,
+    hideProgressBar,
+    closeOnClick,
+    pauseOnHover,
+    draggable,
+    autoClose,
+    toastId: "unique-error-toast",
+  });
+};
+
+export const toastSuccessMessage = (
+  message: ToastMessage,
+  position: ToastPosition | undefined = "bottom-center",
+  hideProgressBar: boolean = true,
+  closeOnClick: boolean = true,
+  pauseOnHover: boolean = true,
+  draggable: boolean = true,
+  autoClose: number = 2500,
+): void => {
+  toast.success(message, {
+    position,
+    hideProgressBar,
+    closeOnClick,
+    pauseOnHover,
+    draggable,
+    autoClose,
+    toastId: "unique-success-toast",
+  });
+};
+
+export const toastInfoMessage = (
+  message: ToastMessage,
+  position: ToastPosition | undefined = "bottom-center",
+  hideProgressBar: boolean = true,
+  closeOnClick: boolean = true,
+  pauseOnHover: boolean = true,
+  draggable: boolean = true,
+  autoClose: number = 1000,
+): void => {
+  toast.info(message, {
+    position,
+    hideProgressBar,
+    closeOnClick,
+    pauseOnHover,
+    draggable,
+    autoClose,
+    toastId: "unique-info-toast",
   });
 };
 

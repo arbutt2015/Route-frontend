@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Dropdown from "react-bootstrap/Dropdown";
 
 export const ApplicationShell = styled.div`
   --header-height: 96px;
@@ -133,6 +134,26 @@ export const Badge = styled.span`
   color: white;
   font-size: 10px;
   line-height: 14px;
+`;
+
+export const ProfileMenu = styled(Dropdown)`
+  margin-left: auto;
+  flex-shrink: 0;
+
+  .dropdown-menu {
+    min-width: 180px;
+    border-color: #e0e0e0;
+    box-shadow: 0 4px 12px #00000018;
+  }
+
+  .dropdown-item {
+    padding: 8px 16px;
+    font-size: 18px;
+  }
+
+  .dropdown-toggle::after {
+    display: none;
+  }
 `;
 
 export const ProfileButton = styled.button`

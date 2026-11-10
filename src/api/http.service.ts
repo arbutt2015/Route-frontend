@@ -9,12 +9,18 @@ const client = axios.create({
 });
 
 export const request = async <T = unknown>(
-  method: "GET" | "POST" | "PUT",
+  method: "GET" | "POST" | "PUT" | "PATCH",
   url: string,
   data?: unknown,
+  headers?: Record<string, string>,
 ): Promise<ApiResult<T>> => {
   try {
-    const response = await client.request<ApiResult<T>>({ method, url, data });
+    const response = await client.request<ApiResult<T>>({
+      method,
+      url,
+      data,
+      headers,
+    });
     return response.data;
   } catch (error) {
     const response = axios.isAxiosError<{
@@ -26,6 +32,7 @@ export const request = async <T = unknown>(
     const message = response?.data?.message;
     return {
       success: false,
+      statusCode: response?.status,
       data: response?.data?.data ?? null,
       message: Array.isArray(message)
         ? message.join(" ")

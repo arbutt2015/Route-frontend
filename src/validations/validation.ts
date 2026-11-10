@@ -66,6 +66,34 @@ export const forgotPasswordFormValidation = Yup.object({
     .required("Verification code is required."),
 });
 
+export const profileValidationSchema = Yup.object({
+  firstName: Yup.string().trim().required("First name is required.").max(100),
+  middleInitial: Yup.string().trim().max(50),
+  lastName: Yup.string().trim().required("Last name is required.").max(100),
+  companyName: Yup.string()
+    .trim()
+    .required("Company name is required.")
+    .max(200),
+  title: Yup.string().trim().max(100),
+  phoneNumber: Yup.string().trim().max(50),
+});
+
+export const changePasswordValidationSchema = Yup.object({
+  currentPassword: Yup.string()
+    .required("Current password is required.")
+    .max(256),
+  newPassword: passwordSchema
+    .max(256)
+    .matches(/^\S+$/, "Password cannot contain spaces.")
+    .notOneOf(
+      [Yup.ref("currentPassword")],
+      "New password must differ from the current password.",
+    ),
+  confirmPassword: Yup.string()
+    .required("Confirm password is required.")
+    .oneOf([Yup.ref("newPassword")], "Passwords must match."),
+});
+
 export const forgotPasswordEmailValidation = Yup.object({
   email: Yup.string()
     .email("Invalid email address.")
