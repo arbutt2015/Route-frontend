@@ -11,10 +11,6 @@ export const RegistrationContainer = styled.div`
     height: 90px;
     font-weight: 600;
   }
-  & .register-error-section {
-    margin-top: -80px;
-    margin-bottom: 30px;
-  }
   & .registration-btn-sec {
     display: flex;
     justify-content: left;

@@ -5,7 +5,6 @@ export const Container = styled.div`
   & .forgot-password-form {
     width: 400px;
     & .forgot-password-form-field {
-      font-weight: 600;
       height: 90px;
       font-weight: normal;
       & .forgot-password-input-form-field {
@@ -22,7 +21,7 @@ export const Container = styled.div`
       color: var(--error-message-color);
       font-size: 0.875em;
       height: 20px;
-      margin-top: -30px;
+      margin-top: 0;
     }
     & .forgot-password-footer {
       text-align: left;
@@ -37,16 +36,6 @@ export const Container = styled.div`
       & .forgot-cancel-btn {
         background-color: #676767;
         border: none;
-      }
-    }
-    & .reset-password-successfully {
-      height: 26px;
-      color: green;
-      & .click-here-btn {
-        border: none;
-        background-color: transparent;
-        color: var(--primary-color);
-        font-weight: 600;
       }
     }
   }

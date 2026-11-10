@@ -1,4 +1,4 @@
-import { LoginFormContainer } from "./LoginForn.style";
+import { LoginFormContainer } from "./LoginForm.style";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Link } from "react-router-dom";
@@ -9,19 +9,24 @@ import { loginFormValidationSchema } from "../../validations/validation";
 import { loginAPI } from "../../api/auth";
 import Loader from "../../components/Loader/Loader";
 import WebStorage from "../../utils/WebStorage";
-import { useEffect, useState } from "react";
-import { LoginFormType } from "../../types";
-import { getUserAssignedProjectsApi } from "../../api/dashboard";
+import { useState } from "react";
 import useAppState from "../../hooks/useAppState";
-import { IoEye } from "react-icons/io5";
-import { IoEyeOff } from "react-icons/io5";
+import PasswordToggle from "../PasswordToggle/PasswordToggle";
 
-const LoginForm: React.FC<LoginFormType> = ({ handleSetEmailTouched, isEmailTouched }) => {
-  const [showPassword, setShowPassword] = useState<boolean>(false);
+const LoginForm = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const { handleSetIsNewUser, handleAnyUserAssignedProject } = useAppState();
+  const { handleSetLoggedInUser } = useAppState();
 
-  const { handleSubmit, handleChange, handleBlur, values, errors, isSubmitting, touched, setFieldTouched } = useFormik({
+  const {
+    handleSubmit,
+    handleChange,
+    handleBlur,
+    values,
+    errors,
+    isSubmitting,
+    touched,
+  } = useFormik({
     initialValues: {
       email: "",
       password: "",
@@ -37,36 +42,17 @@ const LoginForm: React.FC<LoginFormType> = ({ handleSetEmailTouched, isEmailTouc
             expiresIn: response.data.ExpiresIn,
             issuedAt: Date.now(),
           });
-          WebStorage.setLocalStore("user", response.data.user);
-          WebStorage.setLocalStore("showModal", "true");
-          const res = await getUserAssignedProjectsApi();
-
-          if (res.success && res?.data?.length > 0) {
-            handleAnyUserAssignedProject(true);
-          }
-          if (
-            !response.data.user.usersAccess &&
-            !response.data.user.createProjectAccess &&
-            !response.data.user.assetsAccess &&
-            res?.success &&
-            res?.data
-          ) {
-            if (res?.data?.length === 0) {
-              handleSetIsNewUser(true);
-              navigate(ROUTE_NAMES.BASE_PATH, {
-                state: { showProjects: true },
-              });
-              return;
-            }
-          }
-          navigate(ROUTE_NAMES.BASE_PATH, {
-            state: { showProjects: true },
-          });
+          handleSetLoggedInUser(response.data.user);
+          navigate(ROUTE_NAMES.BASE_PATH, { replace: true });
         } else {
           if (response.data?.type === errorType.NOT_VERIFIED) {
+            WebStorage.setLocalStore("email", values.email);
             navigate(ROUTE_NAMES.VERIFICATION);
           } else {
-            toastErrMessage(response?.message ?? "An error occurred while processing your request.");
+            toastErrMessage(
+              response?.message ??
+                "An error occurred while processing your request.",
+            );
           }
         }
       } catch (error) {
@@ -77,42 +63,24 @@ const LoginForm: React.FC<LoginFormType> = ({ handleSetEmailTouched, isEmailTouc
     },
   });
 
-  useEffect(() => {
-    setFieldTouched("email", false);
-    setFieldTouched("password", false);
-  }, [isEmailTouched, setFieldTouched]);
-
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    handleSetEmailTouched(false);
-
-    handleChange(e);
-  };
-  const handleOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    handleSetEmailTouched(false);
-
-    handleBlur(e);
-  };
-  const handleOnSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    handleSetEmailTouched(false);
-
-    handleSubmit();
-  };
-
   return (
     <LoginFormContainer>
-      <Form className="login-form" onSubmit={handleOnSubmit}>
+      <Form className="login-form" onSubmit={handleSubmit}>
         <p className="login-heading">Sign In</p>
-        <Form.Group className="mb-0 form-field-section" controlId="formBasicEmail">
-          <Form.Label className="form-field-label required">Email Address</Form.Label>
+        <Form.Group
+          className="mb-0 form-field-section"
+          controlId="formBasicEmail"
+        >
+          <Form.Label className="form-field-label required">
+            Email Address
+          </Form.Label>
           <Form.Control
             type="email"
             placeholder="abc@xyz.com"
             name="email"
             value={values.email}
-            onChange={handleOnChange}
-            onBlur={handleOnBlur}
+            onChange={handleChange}
+            onBlur={handleBlur}
             isInvalid={!!errors.email && touched.email}
           />
 
@@ -121,33 +89,40 @@ const LoginForm: React.FC<LoginFormType> = ({ handleSetEmailTouched, isEmailTouc
           </Form.Control.Feedback>
         </Form.Group>
 
-        <Form.Group className="mb-0 form-field-section" style={{ position: "relative" }} controlId="formBasicPassword">
-          <Form.Label className="form-field-label required">Password</Form.Label>
+        <Form.Group
+          className="mb-0 form-field-section"
+          style={{ position: "relative" }}
+          controlId="formBasicPassword"
+        >
+          <Form.Label className="form-field-label required">
+            Password
+          </Form.Label>
           <Form.Control
             type={showPassword ? "text" : "password"}
             placeholder="Enter password here"
             name="password"
             style={{ backgroundImage: "none" }}
             value={values.password}
-            onChange={handleOnChange}
-            onBlur={handleOnBlur}
+            onChange={handleChange}
+            onBlur={handleBlur}
             isInvalid={!!errors.password && touched.password}
           />
-          {values.password && <button className="hidden-btn" style={{
-            position: "absolute",
-            top: "57%",
-            right: "10px",
-            transform: "translateY(-50%)",
-            cursor: "pointer",
-            zIndex: 2,
-          }} type="button" onClick={() => setShowPassword(!showPassword)} >
-            {!showPassword ? <IoEyeOff size={18} /> : <IoEye size={18} />}
-          </button>}
+          {values.password && (
+            <PasswordToggle
+              visible={showPassword}
+              onToggle={() => setShowPassword((value) => !value)}
+            />
+          )}
 
-          <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
+          <Form.Control.Feedback type="invalid">
+            {errors.password}
+          </Form.Control.Feedback>
         </Form.Group>
         <div className="login-footer">
-          <Link to={ROUTE_NAMES.REQUEST_PASSWORD_RESET} className="forgot-password-link">
+          <Link
+            to={ROUTE_NAMES.REQUEST_PASSWORD_RESET}
+            className="forgot-password-link"
+          >
             Forgot password?
           </Link>
           <Button

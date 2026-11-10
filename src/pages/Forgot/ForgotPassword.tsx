@@ -1,7 +1,7 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { FormLayout } from "../../components/FormLayout/FormLayout";
 import { Container } from "./ForgotPassword.style";
 import { forgotPasswordFormValidation } from "../../validations/validation";
@@ -10,14 +10,13 @@ import { ROUTE_NAMES, validationRules } from "../../utils/constant";
 import { resetPasswordAPI } from "../../api/auth";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
-import { Row } from "react-bootstrap";
-import { IoEye } from "react-icons/io5";
-import { IoEyeOff } from "react-icons/io5";
+import PasswordToggle from "../../components/PasswordToggle/PasswordToggle";
 
 export const ForgotPasswordForm = () => {
   const [isPasswordChanged, setIsPasswordChanged] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState<boolean>(false);
 
   const [error, setError] = useState<string>("");
 
@@ -28,7 +27,16 @@ export const ForgotPasswordForm = () => {
 
   const navigateToOtherPage = (path: string) => navigate(path);
 
-  const { values, errors, touched, handleChange, handleBlur, handleSubmit, resetForm, isSubmitting } = useFormik({
+  const {
+    values,
+    errors,
+    touched,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    resetForm,
+    isSubmitting,
+  } = useFormik({
     initialValues: {
       password: "",
       confirmPassword: "",
@@ -59,15 +67,21 @@ export const ForgotPasswordForm = () => {
     setError("");
     handleChange(e);
   };
+  if (!email)
+    return <Navigate to={ROUTE_NAMES.REQUEST_PASSWORD_RESET} replace />;
+
   return (
     <FormLayout>
       <Container>
         {isPasswordChanged ? (
           <div className="success-message">
             <div>
-              <p className="forgot-password-heading">Password reset successfully</p>
+              <p className="forgot-password-heading">
+                Password reset successfully
+              </p>
               <p style={{ marginBottom: "20px" }}>
-                Password has been reset successfully. You can login by providing email and password.
+                Password has been reset successfully. You can login by providing
+                email and password.
               </p>
             </div>
             <div>
@@ -77,7 +91,12 @@ export const ForgotPasswordForm = () => {
                 onClick={() => {
                   navigateToOtherPage(ROUTE_NAMES.LOGIN);
                 }}
-                style={{ backgroundColor: "var(--primary-color)", border: "none", width: "90px", marginTop: "15px" }}
+                style={{
+                  backgroundColor: "var(--primary-color)",
+                  border: "none",
+                  width: "90px",
+                  marginTop: "15px",
+                }}
               >
                 Login
               </Button>
@@ -86,8 +105,13 @@ export const ForgotPasswordForm = () => {
         ) : (
           <Form onSubmit={handleSubmit} className="forgot-password-form">
             <p className="forgot-password-heading">Reset Password</p>
-            <Form.Group className="mb-0 forgot-password-form-field" controlId="formBasicPassword">
-              <Form.Label className="field-label required">Verification Code</Form.Label>
+            <Form.Group
+              className="mb-0 forgot-password-form-field"
+              controlId="verificationCode"
+            >
+              <Form.Label className="field-label required">
+                Verification Code
+              </Form.Label>
               <Form.Control
                 type="text"
                 name="verificationCode"
@@ -95,17 +119,26 @@ export const ForgotPasswordForm = () => {
                 placeholder="Enter code here"
                 onChange={handleOnChange}
                 onBlur={handleBlur}
-                isInvalid={touched.verificationCode && !!errors.verificationCode}
+                isInvalid={
+                  touched.verificationCode && !!errors.verificationCode
+                }
                 className="forgot-password-input-form-field"
               />
-              <Form.Control.Feedback type="invalid">{errors.verificationCode}</Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">
+                {errors.verificationCode}
+              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group
               className="forgot-password-form-field"
               controlId="formBasicPassword"
-              style={{ marginBottom: values.password.length > 0 ? "-17px" : "", position: "relative" }}
+              style={{
+                marginBottom: values.password.length > 0 ? "-17px" : "",
+                position: "relative",
+              }}
             >
-              <Form.Label className="required field-label">New Password</Form.Label>
+              <Form.Label className="required field-label">
+                New Password
+              </Form.Label>
               <Form.Control
                 type={showPassword ? "text" : "password"}
                 name="password"
@@ -117,19 +150,18 @@ export const ForgotPasswordForm = () => {
                 isInvalid={touched.password && !!errors.password}
                 className="forgot-password-input-form-field"
               />
-              {values.password && <button className="hidden-btn" style={{
-                position: "absolute",
-                top: "57%",
-                right: "60px",
-                transform: "translateY(-50%)",
-                cursor: "pointer",
-                zIndex: 2,
-              }} type="button" onClick={() => setShowPassword(!showPassword)} >
-                {!showPassword ? <IoEyeOff size={18} /> : <IoEye size={18} />}
-              </button>}
+              {values.password && (
+                <PasswordToggle
+                  right={60}
+                  visible={showPassword}
+                  onToggle={() => setShowPassword((value) => !value)}
+                />
+              )}
 
               {errors.password === "Password is required." && (
-                <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  {errors.password}
+                </Form.Control.Feedback>
               )}
             </Form.Group>
             {values.password.length > 0 && (
@@ -137,15 +169,24 @@ export const ForgotPasswordForm = () => {
                 {validationRules.map(({ regex, message }, index) => (
                   <div
                     key={index}
-                    style={{ marginBottom: "-5px", color: regex.test(values.password) ? "green" : "red" }}
+                    style={{
+                      marginBottom: "-5px",
+                      color: regex.test(values.password) ? "green" : "red",
+                    }}
                   >
                     {regex.test(values.password) ? "✔" : "✖"} {message}
                   </div>
                 ))}
               </div>
             )}
-            <Form.Group style={{ position: "relative" }} className="mb-3 forgot-password-form-field" controlId="formBasicConfirmPassword">
-              <Form.Label className="required field-label">Confirm Password</Form.Label>
+            <Form.Group
+              style={{ position: "relative" }}
+              className="mb-3 forgot-password-form-field"
+              controlId="formBasicConfirmPassword"
+            >
+              <Form.Label className="required field-label">
+                Confirm Password
+              </Form.Label>
               <Form.Control
                 type={showConfirmPassword ? "text" : "password"}
                 name="confirmPassword"
@@ -157,47 +198,19 @@ export const ForgotPasswordForm = () => {
                 isInvalid={touched.confirmPassword && !!errors.confirmPassword}
                 className="forgot-password-input-form-field"
               />
-              {values.confirmPassword && <button className="hidden-btn" style={{
-                position: "absolute",
-                top: "57%",
-                right: "60px",
-                transform: "translateY(-50%)",
-                cursor: "pointer",
-                zIndex: 2,
-              }} type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} >
-                {!showConfirmPassword ? <IoEyeOff size={18} /> : <IoEye size={18} />}
-              </button>}
-              <Form.Control.Feedback type="invalid">{errors.confirmPassword}</Form.Control.Feedback>
-            </Form.Group>
-            <p className="reset-password-successfully">
-              {isPasswordChanged ? (
-                <>
-                  <Row>
-                    <p style={{ marginBottom: "20px" }}>
-                      Your account has been activated successfully. You can login by providing email and password.
-                    </p>
-                  </Row>
-
-                  <Button
-                    variant="primary"
-                    type="submit"
-                    onClick={() => {
-                      navigateToOtherPage(ROUTE_NAMES.LOGIN);
-                    }}
-                    style={{
-                      backgroundColor: "var(--primary-color)",
-                      border: "none",
-                      width: "90px",
-                      marginTop: "15px",
-                    }}
-                  >
-                    Login
-                  </Button>
-                </>
-              ) : (
-                ""
+              {values.confirmPassword && (
+                <PasswordToggle
+                  right={60}
+                  label="confirm password"
+                  visible={showConfirmPassword}
+                  onToggle={() => setShowConfirmPassword((value) => !value)}
+                />
               )}
-            </p>
+              <Form.Control.Feedback type="invalid">
+                {errors.confirmPassword}
+              </Form.Control.Feedback>
+            </Form.Group>
+
             <p className="error-message-sec-forgot">{error}</p>
             <div className="forgot-password-footer">
               <Button

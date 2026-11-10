@@ -1,18 +1,35 @@
 import { ErrorFallbackContainer } from "./ErrorFallBack.style";
 import oops from "../../assets/images/oops.png";
 
-const env = import.meta.env.NODE_ENV;
+import { environment } from "../../config/environment";
 
-const ErrorFallback = ({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) => {
+const ErrorFallback = ({
+  error,
+  resetErrorBoundary,
+}: {
+  error: Error;
+  resetErrorBoundary: () => void;
+}) => {
   return (
     <ErrorFallbackContainer role="alert">
-      <img src={oops} height={170} loading="lazy" style={{ mixBlendMode: "multiply" }} />
+      <img
+        src={oops}
+        alt=""
+        height={170}
+        loading="lazy"
+        style={{ mixBlendMode: "multiply" }}
+      />
       <p className="error-heading">Oops! Something went wrong.</p>
-      <p>We encountered an issue while processing your request. Our team is looking into it.</p>
+      <p>
+        We encountered an issue while processing your request. Our team is
+        looking into it.
+      </p>
 
-      {env !== "production" && (
+      {environment.isDevelopment && (
         <>
-          <p style={{ color: "red" }}>Error details: {error?.message ?? `${error}`}</p>
+          <p style={{ color: "red" }}>
+            Error details: {error?.message ?? `${error}`}
+          </p>
           <pre style={{ color: "red" }}>{error?.stack ?? ""}</pre>
         </>
       )}

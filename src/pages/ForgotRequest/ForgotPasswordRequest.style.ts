@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   display: flex;
-  /* justify-content: center; */
 
   & .forgot-password-form {
     & .forgot-password-heading {

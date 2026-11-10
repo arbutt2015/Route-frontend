@@ -9,9 +9,8 @@
   --error-message-color: #dc3545;
   --cancel-color: #676767;
   --secondary-color: #146eb4;
-
 }
 
 .Toastify__toast-container {
-    z-index: 999999 !important;
+  z-index: 999999 !important;
 }

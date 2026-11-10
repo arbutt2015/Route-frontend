@@ -2,51 +2,57 @@ import "./App.css";
 import AppRoutes from "./routes/AppRoutes";
 import routeLogo from "./assets/images/logo.png";
 import { useEffect } from "react";
-import { getDomainByUrlApi } from "./api/dashboard";
+import { getDomainByUrlApi } from "./api/branding";
 import useAppState from "./hooks/useAppState";
-import favIcon from "./assets/images/logo.png";
-import { BASE_URL } from "./utils/constant";
+import { environment } from "./config/environment";
+
+const fallbackDomain = {
+  logo: routeLogo,
+  companyName: "Transconomy",
+  favIcon: routeLogo,
+};
 
 const App = () => {
   const { handleDomainInfo, domainInfo } = useAppState();
 
-  const getDomainInfo = async () => {
-    const domain = window.location.origin;
-
-    try {
-      const res = await getDomainByUrlApi(domain);
-      if (res?.success) {
-        handleDomainInfo({
-          logo: res?.data?.logoPath ? `${BASE_URL}/${res?.data?.logoPath}` : `${routeLogo}`,
-          companyName: res.data?.companyName,
-          favIcon: res?.data?.favIcon ? `${BASE_URL}/${res?.data?.favIcon}` : `${favIcon}`,
-        });
-      } else {
-        handleDomainInfo({
-          logo: `${routeLogo}`,
-          companyName: "Transconomy",
-          favIcon: `${favIcon}`,
-        });
+  useEffect(() => {
+    let active = true;
+    const loadDomain = async () => {
+      try {
+        const res = await getDomainByUrlApi(window.location.origin);
+        if (!active) return;
+        handleDomainInfo(
+          res.success && res.data
+            ? {
+                logo: res.data.logoPath
+                  ? new URL(res.data.logoPath, `${environment.apiBaseUrl}/`)
+                      .href
+                  : routeLogo,
+                companyName: res.data.companyName || fallbackDomain.companyName,
+                favIcon: res.data.favIcon
+                  ? new URL(res.data.favIcon, `${environment.apiBaseUrl}/`).href
+                  : routeLogo,
+              }
+            : fallbackDomain,
+        );
+      } catch {
+        if (active) handleDomainInfo(fallbackDomain);
       }
-    } catch (error) {
-      handleDomainInfo({
-        logo: `${routeLogo}`,
-        companyName: "Transconomy",
-        favIcon: `${favIcon}`,
-      });
-    }
-  };
-  useEffect(() => {
-    const link: HTMLLinkElement = document.querySelector("link[rel~='icon']") || document.createElement("link");
+    };
+    void loadDomain();
+    return () => {
+      active = false;
+    };
+  }, [handleDomainInfo]);
 
+  useEffect(() => {
+    const link =
+      document.querySelector<HTMLLinkElement>("link[rel~='icon']") ||
+      document.createElement("link");
     link.rel = "icon";
-    link.href = domainInfo?.favIcon ?? favIcon;
-    document.head.appendChild(link);
+    link.href = domainInfo?.favIcon ?? routeLogo;
+    if (!link.isConnected) document.head.appendChild(link);
   }, [domainInfo?.favIcon]);
-
-  useEffect(() => {
-    getDomainInfo();
-  }, []);
 
   return <AppRoutes />;
 };

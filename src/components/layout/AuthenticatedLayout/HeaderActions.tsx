@@ -11,36 +11,56 @@ import removeIcon from "../../../assets/icons/route-remove.svg";
 import undoIcon from "../../../assets/icons/route-undo.svg";
 import redoIcon from "../../../assets/icons/route-redo.svg";
 import { HeaderIconButton } from "./HeaderIconButton";
-import { ActionGroup, ActionNavigation, ActionRow, GroupCaption } from "./AuthenticatedLayout.style";
+import {
+  ActionGroup,
+  ActionNavigation,
+  ActionRow,
+  GroupCaption,
+} from "./AuthenticatedLayout.style";
 
 const groups = [
-  { label: "Project", actions: [
-    { id: "new", label: "New", icon: newIcon, disabled: false },
-    { id: "open", label: "Open", icon: openIcon, disabled: false },
-    { id: "details", label: "Details", icon: detailsIcon, disabled: true },
-    { id: "lock", label: "Lock", icon: lockIcon, disabled: true },
-    { id: "routeCode", label: "Route Code", icon: codeIcon, disabled: true },
-    { id: "showCollected", label: "Show Collected", icon: collectedIcon, disabled: true },
-  ] },
-  { label: "Route", actions: [
-    { id: "edit", label: "Edit", icon: editIcon, disabled: true },
-    { id: "save", label: "Save", icon: saveIcon, disabled: true },
-    { id: "draw", label: "Draw", icon: drawIcon, disabled: true },
-    { id: "remove", label: "Remove", icon: removeIcon, disabled: true },
-    { id: "undo", label: "Undo", icon: undoIcon, disabled: true },
-    { id: "redo", label: "Redo", icon: redoIcon, disabled: true },
-  ] },
+  {
+    label: "Project",
+    actions: [
+      { id: "new", label: "New", icon: newIcon, disabled: false },
+      { id: "open", label: "Open", icon: openIcon, disabled: false },
+      { id: "details", label: "Details", icon: detailsIcon, disabled: true },
+      { id: "lock", label: "Lock", icon: lockIcon, disabled: true },
+      { id: "routeCode", label: "Route Code", icon: codeIcon, disabled: true },
+      {
+        id: "showCollected",
+        label: "Show Collected",
+        icon: collectedIcon,
+        disabled: true,
+      },
+    ],
+  },
+  {
+    label: "Route",
+    actions: [
+      { id: "edit", label: "Edit", icon: editIcon, disabled: true },
+      { id: "save", label: "Save", icon: saveIcon, disabled: true },
+      { id: "draw", label: "Draw", icon: drawIcon, disabled: true },
+      { id: "remove", label: "Remove", icon: removeIcon, disabled: true },
+      { id: "undo", label: "Undo", icon: undoIcon, disabled: true },
+      { id: "redo", label: "Redo", icon: redoIcon, disabled: true },
+    ],
+  },
 ] as const;
 
-export type HeaderActionId = typeof groups[number]["actions"][number]["id"];
+export type HeaderActionId = (typeof groups)[number]["actions"][number]["id"];
 export type HeaderActionHandlers = Partial<Record<HeaderActionId, () => void>>;
 
-export const HeaderActions = ({ actions = {} }: { actions?: HeaderActionHandlers }) => (
+export const HeaderActions = ({
+  actions = {},
+}: {
+  actions?: HeaderActionHandlers;
+}) => (
   <ActionNavigation aria-label="Project and route actions">
-    {groups.map(group => (
+    {groups.map((group) => (
       <ActionGroup key={group.label} role="group" aria-label={group.label}>
         <ActionRow>
-          {group.actions.map(action => (
+          {group.actions.map((action) => (
             <HeaderIconButton
               key={action.id}
               icon={<img src={action.icon} alt="" aria-hidden="true" />}

@@ -14,14 +14,21 @@ export const ForgotPasswordRequestForm = () => {
 
   const navigateToOtherPage = (path: string) => navigate(path);
 
-  const { values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting } = useFormik({
+  const {
+    values,
+    errors,
+    touched,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    isSubmitting,
+  } = useFormik({
     initialValues: {
       email: "",
     },
     validationSchema: forgotPasswordEmailValidation,
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        // Add your form submission logic here
         const response = await requestPasswordReset({ email: values.email });
         if (response.success) {
           navigate(ROUTE_NAMES.FORGOT_PASSWORD, {
@@ -31,7 +38,6 @@ export const ForgotPasswordRequestForm = () => {
           toastErrMessage(response?.message);
         }
       } catch (error) {
-        // Handle form submission error here
         toastErrMessage("An error occurred while processing your request.");
       }
       setSubmitting(false);
@@ -46,10 +52,16 @@ export const ForgotPasswordRequestForm = () => {
         <Form onSubmit={handleSubmit} className="forgot-password-form">
           <p className="forgot-password-heading">Forgot Password</p>
           <p className="forgot-password-msg">
-            Please enter your email address, and we will send a verification code to reset your password.
+            Please enter your email address, and we will send a verification
+            code to reset your password.
           </p>
-          <Form.Group className="forgot-password-form-field" controlId="formBasicEmail">
-            <Form.Label className="required forgot-password-field-label">Email Address</Form.Label>
+          <Form.Group
+            className="forgot-password-form-field"
+            controlId="formBasicEmail"
+          >
+            <Form.Label className="required forgot-password-field-label">
+              Email Address
+            </Form.Label>
             <Form.Control
               type="email"
               name="email"
@@ -60,7 +72,9 @@ export const ForgotPasswordRequestForm = () => {
               isInvalid={touched.email && !!errors.email}
               className="forgot-password-input-field"
             />
-            <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+              {errors.email}
+            </Form.Control.Feedback>
           </Form.Group>
           <div className="forgot-password-footer">
             <Button

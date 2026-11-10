@@ -14,16 +14,17 @@ import { RegistrationContainer } from "./RegistrationForm.style";
 import useAppState from "../../hooks/useAppState";
 import { validationRules } from "../../utils/constant";
 import { useState } from "react";
-import { IoEye, IoEyeOff } from "react-icons/io5";
+import PasswordToggle from "../../components/PasswordToggle/PasswordToggle";
 
 const Registration = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState<boolean>(false);
 
   const navigate = useNavigate();
   const { domainInfo } = useAppState();
 
-  const userEmail = WebStorage.getLocalStore("email");
+  const userEmail = WebStorage.getLocalStore("email") ?? "";
   const initialValues = {
     email: userEmail,
     firstName: "",
@@ -38,7 +39,16 @@ const Registration = () => {
     isSdUser: false,
   };
 
-  const { isSubmitting, touched, errors, values, handleChange, handleSubmit, handleBlur, setFieldValue } = useFormik({
+  const {
+    isSubmitting,
+    touched,
+    errors,
+    values,
+    handleChange,
+    handleSubmit,
+    handleBlur,
+    setFieldValue,
+  } = useFormik({
     initialValues,
     validationSchema: registrationValidationSchema,
     onSubmit: async (values, { setSubmitting }) => {
@@ -74,8 +84,13 @@ const Registration = () => {
         <Form onSubmit={handleSubmit}>
           <Row className="mb-0">
             <Col sm="6">
-              <Form.Group controlId="formPlaintextEmail" className="registration-field">
-                <Form.Label className="form-field-label required">Email Address</Form.Label>
+              <Form.Group
+                controlId="formPlaintextEmail"
+                className="registration-field"
+              >
+                <Form.Label className="form-field-label required">
+                  Email Address
+                </Form.Label>
                 <Form.Control
                   type="email"
                   placeholder="Email"
@@ -92,7 +107,10 @@ const Registration = () => {
 
           <Row className="mb-0">
             <Col sm="4">
-              <Form.Group controlId="formPlaintextFirstName" className="registration-field">
+              <Form.Group
+                controlId="formPlaintextFirstName"
+                className="registration-field"
+              >
                 <Form.Label className="required">First Name</Form.Label>
                 <Form.Control
                   type="text"
@@ -103,11 +121,16 @@ const Registration = () => {
                   onBlur={handleBlur}
                   isInvalid={!!errors.firstName && touched.firstName}
                 />
-                <Form.Control.Feedback type="invalid">{errors.firstName}</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  {errors.firstName}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col sm="4">
-              <Form.Group controlId="formPlaintextMiddleInitial" className="registration-field">
+              <Form.Group
+                controlId="formPlaintextMiddleInitial"
+                className="registration-field"
+              >
                 <Form.Label>Middle Name</Form.Label>
                 <Form.Control
                   type="text"
@@ -120,7 +143,10 @@ const Registration = () => {
               </Form.Group>
             </Col>
             <Col sm="4">
-              <Form.Group controlId="formPlaintextLastName" className="registration-field">
+              <Form.Group
+                controlId="formPlaintextLastName"
+                className="registration-field"
+              >
                 <Form.Label className="required">Last Name</Form.Label>
                 <Form.Control
                   type="text"
@@ -131,14 +157,19 @@ const Registration = () => {
                   onBlur={handleBlur}
                   isInvalid={!!errors.lastName && touched.lastName}
                 />
-                <Form.Control.Feedback type="invalid">{errors.lastName}</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  {errors.lastName}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Row>
 
           <Row className="mb-0">
             <Col sm="6">
-              <Form.Group controlId="formPlaintextCompanyName" className="registration-field">
+              <Form.Group
+                controlId="formPlaintextCompanyName"
+                className="registration-field"
+              >
                 <Form.Label className="required">Company Name</Form.Label>
                 <Form.Control
                   type="text"
@@ -149,14 +180,19 @@ const Registration = () => {
                   onBlur={handleBlur}
                   isInvalid={!!errors.companyName && touched.companyName}
                 />
-                <Form.Control.Feedback type="invalid">{errors.companyName}</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  {errors.companyName}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Row>
 
           <Row className="mb-0">
             <Col sm="6">
-              <Form.Group controlId="formPlaintextTitle" className="registration-field">
+              <Form.Group
+                controlId="formPlaintextTitle"
+                className="registration-field"
+              >
                 <Form.Label>Title</Form.Label>
                 <Form.Control
                   type="text"
@@ -169,7 +205,10 @@ const Registration = () => {
               </Form.Group>
             </Col>
             <Col sm="6">
-              <Form.Group controlId="formPlaintextPhoneNumber" className="registration-field">
+              <Form.Group
+                controlId="formPlaintextPhoneNumber"
+                className="registration-field"
+              >
                 <Form.Label>Phone Number</Form.Label>
                 <Form.Control
                   type="text"
@@ -181,7 +220,9 @@ const Registration = () => {
                   autoComplete="new-password"
                   isInvalid={!!errors.phoneNumber && touched.phoneNumber}
                 />
-                <Form.Control.Feedback type="invalid">{errors.phoneNumber}</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  {errors.phoneNumber}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Row>
@@ -190,7 +231,10 @@ const Registration = () => {
               <Form.Group
                 controlId="formPlaintextPassword"
                 className="registration-field"
-                style={{ marginBottom: values.password.length > 0 ? "-17px" : "", position: "relative" }}
+                style={{
+                  marginBottom: values.password.length > 0 ? "-17px" : "",
+                  position: "relative",
+                }}
               >
                 <Form.Label className="required">Password</Form.Label>
                 <Form.Control
@@ -204,18 +248,16 @@ const Registration = () => {
                   autoComplete="new-password"
                   isInvalid={!!errors.password && touched.password}
                 />
-                {values.password && <button className="hidden-btn" style={{
-                  position: "absolute",
-                  top: "57%",
-                  right: "10px",
-                  transform: "translateY(-50%)",
-                  cursor: "pointer",
-                  zIndex: 2,
-                }} type="button" onClick={() => setShowPassword(!showPassword)} >
-                  {!showPassword ? <IoEyeOff size={18} /> : <IoEye size={18} />}
-                </button>}
+                {values.password && (
+                  <PasswordToggle
+                    visible={showPassword}
+                    onToggle={() => setShowPassword((value) => !value)}
+                  />
+                )}
                 {errors.password === "Password is required." && (
-                  <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.password}
+                  </Form.Control.Feedback>
                 )}
               </Form.Group>
               {values.password.length > 0 && (
@@ -223,7 +265,10 @@ const Registration = () => {
                   {validationRules.map(({ regex, message }, index) => (
                     <div
                       key={index}
-                      style={{ marginBottom: "-5px", color: regex.test(values.password) ? "green" : "red" }}
+                      style={{
+                        marginBottom: "-5px",
+                        color: regex.test(values.password) ? "green" : "red",
+                      }}
                     >
                       {regex.test(values.password) ? "✔" : "✖"} {message}
                     </div>
@@ -232,7 +277,11 @@ const Registration = () => {
               )}
             </Col>
             <Col sm="6">
-              <Form.Group controlId="formPlaintextConfirmPassword" className="registration-field" style={{ position: "relative" }}>
+              <Form.Group
+                controlId="formPlaintextConfirmPassword"
+                className="registration-field"
+                style={{ position: "relative" }}
+              >
                 <Form.Label className="required">Confirm Password</Form.Label>
                 <Form.Control
                   type={showConfirmPassword ? "text" : "password"}
@@ -243,30 +292,34 @@ const Registration = () => {
                   onChange={handleOnChange}
                   onBlur={handleBlur}
                   autoComplete="new-password"
-                  isInvalid={!!errors.confirmPassword && touched.confirmPassword}
+                  isInvalid={
+                    !!errors.confirmPassword && touched.confirmPassword
+                  }
                 />
-                {values.confirmPassword && <button className="hidden-btn" style={{
-                  position: "absolute",
-                  top: "57%",
-                  right: "10px",
-                  transform: "translateY(-50%)",
-                  cursor: "pointer",
-                  zIndex: 2,
-                }} type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} >
-                  {!showConfirmPassword ? <IoEyeOff size={18} /> : <IoEye size={18} />}
-                </button>}
-                <Form.Control.Feedback type="invalid">{errors.confirmPassword}</Form.Control.Feedback>
+                {values.confirmPassword && (
+                  <PasswordToggle
+                    label="confirm password"
+                    visible={showConfirmPassword}
+                    onToggle={() => setShowConfirmPassword((value) => !value)}
+                  />
+                )}
+                <Form.Control.Feedback type="invalid">
+                  {errors.confirmPassword}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Row>
 
           <Row className="mb-1">
             <p style={{ textAlign: "justify", fontSize: "14px" }}>
-              By creating a {domainInfo?.companyName} account and agreeing to these terms and conditions, you are
-              granting {domainInfo?.companyName}
-              permission to contact you via email to inform you about {domainInfo?.companyName} products and services.
-              In addition, your information will be added to the {domainInfo?.companyName} database, which will be used
-              to periodically send you marketing communications.
+              By creating a {domainInfo?.companyName} account and agreeing to
+              these terms and conditions, you are granting{" "}
+              {domainInfo?.companyName}
+              permission to contact you via email to inform you about{" "}
+              {domainInfo?.companyName} products and services. In addition, your
+              information will be added to the {domainInfo?.companyName}{" "}
+              database, which will be used to periodically send you marketing
+              communications.
             </p>
           </Row>
           <Col sm="6" style={{ marginBottom: "30px" }}>
@@ -275,13 +328,16 @@ const Registration = () => {
                 type="checkbox"
                 label={
                   <>
-                    I agree to the terms and conditions <span style={{ color: "red", fontSize: "18px" }}>*</span>
+                    I agree to the terms and conditions{" "}
+                    <span style={{ color: "red", fontSize: "18px" }}>*</span>
                   </>
                 }
                 onChange={handleCheckboxChange}
                 isInvalid={!!errors.agreeToTerms && touched.agreeToTerms}
               />
-              <Form.Control.Feedback type="invalid">{errors.agreeToTerms}</Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">
+                {errors.agreeToTerms}
+              </Form.Control.Feedback>
             </Form.Group>
           </Col>
           <Row className="registration-btn-sec">

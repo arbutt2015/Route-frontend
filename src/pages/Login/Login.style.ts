@@ -11,7 +11,6 @@ export const LoginContainer = styled.div`
       font-weight: 600;
     }
     & .register-email-field {
-      /* width: 350px; */
       height: 90px;
     }
     & .register-btn-section {

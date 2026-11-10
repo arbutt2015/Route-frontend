@@ -38,8 +38,14 @@ export const LogoLink = styled.a`
   align-items: center;
   width: 196.67px;
   height: 48px;
-  img { width: 100%; height: 100%; }
-  &:focus-visible { outline: 2px solid #146eb4; outline-offset: 4px; }
+  img {
+    width: 100%;
+    height: 100%;
+  }
+  &:focus-visible {
+    outline: 2px solid #146eb4;
+    outline-offset: 4px;
+  }
 `;
 
 export const ActionNavigation = styled.nav`
@@ -58,7 +64,9 @@ export const ActionGroup = styled.div`
   width: 379px;
   height: 85px;
   border-left: 1px solid var(--header-border);
-  &:last-child { border-right: 1px solid var(--header-border); }
+  &:last-child {
+    border-right: 1px solid var(--header-border);
+  }
 `;
 
 export const ActionRow = styled.div`
@@ -93,11 +101,26 @@ export const ActionButton = styled.button`
   font: inherit;
   font-size: 12px;
   line-height: 15px;
-  img, svg { width: 24px; height: 24px; flex-shrink: 0; }
-  &:disabled { opacity: 0.4; cursor: default; }
-  &:not(:disabled):hover { background: #eef6fc; }
-  &:not(:disabled):active { background: #dcecf8; }
-  &:focus-visible { outline: 2px solid #146eb4; outline-offset: 2px; }
+  img,
+  svg {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+  &:not(:disabled):hover {
+    background: #eef6fc;
+  }
+  &:not(:disabled):active {
+    background: #dcecf8;
+  }
+  &:focus-visible {
+    outline: 2px solid #146eb4;
+    outline-offset: 2px;
+  }
 `;
 
 export const Badge = styled.span`
@@ -127,10 +150,20 @@ export const ProfileButton = styled.button`
   font: inherit;
   font-size: 16px;
   font-weight: 600;
-  img { width: 24px; height: 24px; }
-  &:hover { background: #eef6fc; }
-  &:active { background: #dcecf8; }
-  &:focus-visible { outline: 2px solid #146eb4; outline-offset: 2px; }
+  img {
+    width: 24px;
+    height: 24px;
+  }
+  &:hover {
+    background: #eef6fc;
+  }
+  &:active {
+    background: #dcecf8;
+  }
+  &:focus-visible {
+    outline: 2px solid #146eb4;
+    outline-offset: 2px;
+  }
 `;
 
 export const PageContent = styled.main`

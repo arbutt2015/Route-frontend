@@ -9,7 +9,7 @@ import Loader from "../../components/Loader/Loader";
 import { useFormik } from "formik";
 import { reSendVerificationCodeAPI } from "../../api/auth";
 import { VerificationFormValidationSchema } from "../../validations/validation";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { FormLayout } from "../../components/FormLayout/FormLayout";
 import WebStorage from "../../utils/WebStorage";
 import useAppState from "../../hooks/useAppState";
@@ -17,13 +17,22 @@ import useAppState from "../../hooks/useAppState";
 export const VerificationForm = () => {
   const [isResent, setIsResent] = useState<boolean>(false);
   const [completed, setCompleted] = useState<boolean>(false);
-  const userEmail = WebStorage.getLocalStore("email");
+  const userEmail = WebStorage.getLocalStore("email") ?? "";
   const { domainInfo } = useAppState();
   const navigate = useNavigate();
 
   const navigateToOtherPage = (path: string) => navigate(path);
 
-  const { values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, resetForm } = useFormik({
+  const {
+    values,
+    errors,
+    touched,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    isSubmitting,
+    resetForm,
+  } = useFormik({
     initialValues: {
       verificationCode: "",
     },
@@ -63,11 +72,11 @@ export const VerificationForm = () => {
       setIsResent(false);
     }
   };
-  if (!userEmail) navigateToOtherPage(ROUTE_NAMES.LOGIN);
-
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     handleChange(e);
   };
+
+  if (!userEmail) return <Navigate to={ROUTE_NAMES.LOGIN} replace />;
 
   return (
     <FormLayout>
@@ -77,15 +86,27 @@ export const VerificationForm = () => {
           {completed ? "Account created Successfully" : "Email Verification"}
         </h5>
         <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-0 verification-form-field" controlId="formBasicEmail">
-            <Form.Label className="field-label form-field-label">Email Address</Form.Label>
-            <Form.Control type="email" placeholder="Email" value={userEmail} readOnly disabled />
+          <Form.Group
+            className="mb-0 verification-form-field"
+            controlId="formBasicEmail"
+          >
+            <Form.Label className="field-label form-field-label">
+              Email Address
+            </Form.Label>
+            <Form.Control
+              type="email"
+              placeholder="Email"
+              value={userEmail}
+              readOnly
+              disabled
+            />
           </Form.Group>
           {completed ? (
             <>
               <Row>
                 <p style={{ marginBottom: "20px" }}>
-                  Your account has been activated successfully. You can login by providing email and password.
+                  Your account has been activated successfully. You can login by
+                  providing email and password.
                 </p>
               </Row>
 
@@ -95,7 +116,12 @@ export const VerificationForm = () => {
                 onClick={() => {
                   navigateToOtherPage(ROUTE_NAMES.LOGIN);
                 }}
-                style={{ backgroundColor: "var(--primary-color)", border: "none", width: "90px", marginTop: "15px" }}
+                style={{
+                  backgroundColor: "var(--primary-color)",
+                  border: "none",
+                  width: "90px",
+                  marginTop: "15px",
+                }}
               >
                 Login
               </Button>
@@ -104,13 +130,20 @@ export const VerificationForm = () => {
             <>
               <Row>
                 <p style={{ marginBottom: "30px", fontSize: "14px" }}>
-                  Check your email for the verification code to complete your {domainInfo?.companyName} registration.
-                  Didn't receive it? Click <span style={{ fontWeight: "bold" }}>"Resend Code"</span>.
+                  Check your email for the verification code to complete your{" "}
+                  {domainInfo?.companyName} registration. Didn't receive it?
+                  Click{" "}
+                  <span style={{ fontWeight: "bold" }}>"Resend Code"</span>.
                 </p>
               </Row>
-              <Form.Group className="mb-0 verification-form-field" controlId="formBasicEmail">
+              <Form.Group
+                className="mb-0 verification-form-field"
+                controlId="formBasicEmail"
+              >
                 <div className="verification-code-field-label">
-                  <Form.Label className="field-label required">Verification Code</Form.Label>
+                  <Form.Label className="field-label required">
+                    Verification Code
+                  </Form.Label>
                 </div>
                 <div className="verification-code-sec">
                   <Form.Control
@@ -120,7 +153,9 @@ export const VerificationForm = () => {
                     placeholder="Verification Code"
                     onChange={handleOnChange}
                     onBlur={handleBlur}
-                    isInvalid={touched.verificationCode && !!errors.verificationCode}
+                    isInvalid={
+                      touched.verificationCode && !!errors.verificationCode
+                    }
                     style={{ width: "375px", marginRight: "14px" }}
                   />
                   <Form.Label>
@@ -129,7 +164,11 @@ export const VerificationForm = () => {
                         <Loader label="" />
                       </span>
                     ) : (
-                      <button className="resend-code" type="button" onClick={reSendCode}>
+                      <button
+                        className="resend-code"
+                        type="button"
+                        onClick={reSendCode}
+                      >
                         {" "}
                         Resend Code
                       </button>

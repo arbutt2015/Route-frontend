@@ -35,15 +35,6 @@ export const Container = styled.div`
         color: var(--primary-color);
       }
     }
-    & .verification-field-error {
-      font-weight: normal !important;
-    }
-  }
-  & .error-message-section-verification {
-    color: var(--error-message-color);
-    font-size: 0.875em;
-    height: 20px;
-    margin-top: -30px;
   }
   & .verification-footer {
     text-align: left;
@@ -67,16 +58,5 @@ export const Container = styled.div`
     margin-top: -17px;
     color: #dc3545;
     font-size: 0.875em;
-  }
-  & .register-successfully {
-    color: green;
-    /* margin-top: 30px; */
-    height: 26px;
-    & .click-here-btn {
-      border: none;
-      background-color: transparent;
-      color: var(--primary-color);
-      font-weight: 600;
-    }
   }
 `;
