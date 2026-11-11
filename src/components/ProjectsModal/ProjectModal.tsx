@@ -3,9 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 import { Container } from "./ProjectModal.style";
 import ScrollBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
-import { assignDemoProject, getAssignedProjects } from "../../api/projects";
+import { getAssignedProjects } from "../../api/projects";
 import { toastErrMessage } from "../../utils/constant";
-import useAppState from "../../hooks/useAppState";
 import Loader from "../Loader/Loader";
 import { GoDotFill } from "react-icons/go";
 import { Button, Form } from "react-bootstrap";
@@ -27,10 +26,6 @@ export const ProjectModal = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedProjectId, setSelectedProjectId] = useState<number>(0);
-  const { user, domainInfo } = useAppState();
-  const [isNewUser, setIsNewUser] = useState<boolean>(
-    WebStorage.getLocalStore<boolean>("isNewUser") ?? false,
-  );
 
   const handleOnClick = (project: ISelectedProject) => {
     setSelectedProjectId(project?.projectId);
@@ -52,22 +47,6 @@ export const ProjectModal = ({
     }
   };
 
-  const handleAssignDemo = async () => {
-    setIsLoading(true);
-    try {
-      const res = await assignDemoProject({ userId: user?.userId });
-      if (res.success) {
-        setIsNewUser(false);
-        WebStorage.setLocalStore("isNewUser", false);
-        WebStorage.setLocalStore("anyUserAssignedProject", true);
-      } else {
-        toastErrMessage("An error occurred while assigning demo project.");
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
     const getUserProjects = async () => {
       setIsLoading(true);
@@ -86,7 +65,7 @@ export const ProjectModal = ({
       }
     };
     void getUserProjects();
-  }, [isNewUser]);
+  }, []);
 
   useEffect(() => {
     const selectedProject =
@@ -106,48 +85,7 @@ export const ProjectModal = ({
 
   return (
     <Modal show={show} onHide={handleClose} centered backdrop="static">
-      {isNewUser ? (
-        <Container>
-          <div className="project-modal-header">
-            <p className="project-modal-label">
-              Welcome to {domainInfo?.companyName} Roadmap
-            </p>
-          </div>
-          <div className="new-user-body">
-            <div className="new-user-msg">
-              <p>
-                Thank you for registering with {domainInfo?.companyName}{" "}
-                Roadmap. {domainInfo?.companyName} Roadmap an AI-assisted
-                platform for transportation infrastructure asset inventory
-                extraction. It provides an end-to-end solution for GIS-based
-                asset inventory management.
-              </p>
-              <p>
-                Explore {domainInfo?.companyName} Roadmap roadway asset data for
-                a sample project. Please contact {domainInfo?.companyName} at
-                (703) 722-2980 or email sales@transconomy.com to talk to a
-                transportation infrastructure expert to discuss how{" "}
-                {domainInfo?.companyName} can help manage inventory and
-                decision-making for your organization.
-              </p>
-            </div>
-            <div className="new-user-btn">
-              <Button
-                onClick={handleAssignDemo}
-                style={{
-                  backgroundColor: "var(--primary-color)",
-                  border: "none",
-                  width: "100px",
-                  height: "39px",
-                }}
-              >
-                {isLoading ? <Loader label="" /> : "   Explore"}
-              </Button>
-            </div>
-          </div>
-        </Container>
-      ) : (
-        <Container>
+      <Container>
           <div className="project-modal-header">
           <p className="project-modal-label">Open Project</p>
           <button
@@ -247,7 +185,6 @@ export const ProjectModal = ({
           </div>
         </div>
         </Container>
-      )}
     </Modal>
   );
 };
