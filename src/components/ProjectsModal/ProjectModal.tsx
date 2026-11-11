@@ -4,7 +4,7 @@ import { Container } from "./ProjectModal.style";
 import ScrollBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
 import { assignDemoProject, getAssignedProjects } from "../../api/projects";
-import { toastErrMessage, toastInfoMessage } from "../../utils/constant";
+import { toastErrMessage } from "../../utils/constant";
 import useAppState from "../../hooks/useAppState";
 import Loader from "../Loader/Loader";
 import { GoDotFill } from "react-icons/go";
@@ -17,7 +17,12 @@ import type {
   ReturnProject,
 } from "../../types";
 
-export const ProjectModal = ({ show, handleClose }: IProjectModalProps) => {
+export const ProjectModal = ({
+  show,
+  handleClose,
+  onCreateProject,
+  onProjectOpened,
+}: IProjectModalProps) => {
   const [projects, setProjects] = useState<ReturnProject[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -40,7 +45,11 @@ export const ProjectModal = ({ show, handleClose }: IProjectModalProps) => {
       return;
     }
     WebStorage.setLocalStore("selectedProject", projectData.project);
-    handleClose();
+    if (onProjectOpened) {
+      onProjectOpened();
+    } else {
+      handleClose();
+    }
   };
 
   const handleAssignDemo = async () => {
@@ -215,9 +224,7 @@ export const ProjectModal = ({ show, handleClose }: IProjectModalProps) => {
           <Button
             type="button"
             className="project-modal-create-project-btn"
-            onClick={() =>
-              toastInfoMessage("Create project is not implemented yet.")
-            }
+            onClick={onCreateProject}
           >
             Create New Project
           </Button>

@@ -22,6 +22,7 @@ const confirmPasswordSchema = Yup.string()
   .oneOf([Yup.ref("password")], "Passwords must match.");
 
 export const registrationValidationSchema = Yup.object({
+  email: Yup.string().email("Invalid email.").required("Email is required."),
   firstName: Yup.string()
     .required("First name is required.")
     .trim(NO_SPACES_MESSAGE)

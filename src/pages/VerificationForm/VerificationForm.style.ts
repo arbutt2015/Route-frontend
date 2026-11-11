@@ -33,6 +33,7 @@ export const Container = styled.div`
         font-size: 16px;
         font-weight: 600;
         color: var(--primary-color);
+        white-space: nowrap;
       }
     }
   }

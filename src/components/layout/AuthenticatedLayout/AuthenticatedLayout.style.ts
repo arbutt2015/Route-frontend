@@ -33,6 +33,15 @@ export const Header = styled.header`
   }
 `;
 
+export const SelectedProjectBar = styled.div`
+  background: #104a8e;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 6px 12px;
+  width: 100%;
+`;
+
 export const LogoLink = styled.a`
   display: flex;
   flex-shrink: 0;

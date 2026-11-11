@@ -16,7 +16,9 @@ import { AuthenticatedLayout } from "../components/layout/AuthenticatedLayout";
 
 const AppRoutes = () => {
   return (
-    <Router>
+    <Router
+      future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+    >
       <Routes>
         <Route path={ROUTE_NAMES.LOGIN} element={<Login />} />
         <Route path={ROUTE_NAMES.VERIFICATION} element={<VerificationForm />} />

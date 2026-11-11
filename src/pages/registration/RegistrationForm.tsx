@@ -25,6 +25,9 @@ const Registration = () => {
   const { domainInfo } = useAppState();
 
   const userEmail = WebStorage.getLocalStore("email") ?? "";
+  if (!userEmail) {
+    navigate(ROUTE_NAMES.LOGIN);
+  }
   const initialValues = {
     email: userEmail,
     firstName: "",

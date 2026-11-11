@@ -24,7 +24,7 @@ const groups = [
     actions: [
       { id: "new", label: "New", icon: newIcon, disabled: false },
       { id: "open", label: "Open", icon: openIcon, disabled: false },
-      { id: "details", label: "Details", icon: detailsIcon, disabled: true },
+      { id: "details", label: "Details", icon: detailsIcon, disabled: false },
       { id: "lock", label: "Lock", icon: lockIcon, disabled: true },
       { id: "routeCode", label: "Route Code", icon: codeIcon, disabled: true },
       {
@@ -50,11 +50,14 @@ const groups = [
 
 export type HeaderActionId = (typeof groups)[number]["actions"][number]["id"];
 export type HeaderActionHandlers = Partial<Record<HeaderActionId, () => void>>;
+export type HeaderActionDisabled = Partial<Record<HeaderActionId, boolean>>;
 
 export const HeaderActions = ({
   actions = {},
+  disabledActions = {},
 }: {
   actions?: HeaderActionHandlers;
+  disabledActions?: HeaderActionDisabled;
 }) => (
   <ActionNavigation aria-label="Project and route actions">
     {groups.map((group) => (
@@ -65,7 +68,7 @@ export const HeaderActions = ({
               key={action.id}
               icon={<img src={action.icon} alt="" aria-hidden="true" />}
               label={action.label}
-              disabled={action.disabled}
+              disabled={disabledActions[action.id] ?? action.disabled}
               onClick={actions[action.id]}
             />
           ))}

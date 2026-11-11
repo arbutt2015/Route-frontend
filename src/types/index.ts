@@ -83,23 +83,20 @@ export interface DomainInfo {
   favIcon: string;
 }
 
-export interface DomainBranding {
-  logoPath?: string;
-  companyName?: string;
-  favIcon?: string;
-}
-
 export interface ISelectedProject {
   agencyName: string;
   projectId: number;
   projectName: string;
   projectNumber: string;
+  description?: string;
   projectS3BucketFolderPath: string;
   geoJsonS3FilePath: string;
   boundingBox: string[];
   regions: unknown;
   projectKmlGeoJson: string;
   isExportable?: boolean;
+  isLocked?: boolean;
+  routeCode?: string;
   projectDataExportUrl?: string;
   isEnableLens: boolean;
   isEnablePlanner: boolean;
@@ -120,6 +117,8 @@ export interface ReturnProject {
 export interface IProjectModalProps {
   show: boolean;
   handleClose: () => void;
+  onCreateProject?: () => void;
+  onProjectOpened?: () => void;
 }
 
 export enum MapType {

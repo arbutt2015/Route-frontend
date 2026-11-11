@@ -1,7 +1,11 @@
 import Dropdown from "react-bootstrap/Dropdown";
 import profileIcon from "../../../assets/icons/user-profile.svg";
 import { HeaderLogo } from "./HeaderLogo";
-import { HeaderActions, HeaderActionHandlers } from "./HeaderActions";
+import {
+  HeaderActions,
+  HeaderActionDisabled,
+  HeaderActionHandlers,
+} from "./HeaderActions";
 import {
   Header,
   ProfileButton,
@@ -11,6 +15,7 @@ import {
 export interface AuthenticatedHeaderProps {
   userName: string;
   actions?: HeaderActionHandlers;
+  disabledActions?: HeaderActionDisabled;
   onUpdateProfile: () => void;
   onLogout: () => void;
 }
@@ -18,12 +23,13 @@ export interface AuthenticatedHeaderProps {
 export const AuthenticatedHeader = ({
   userName,
   actions,
+  disabledActions,
   onUpdateProfile,
   onLogout,
 }: AuthenticatedHeaderProps) => (
   <Header>
     <HeaderLogo />
-    <HeaderActions actions={actions} />
+    <HeaderActions actions={actions} disabledActions={disabledActions} />
     <ProfileMenu align="end">
       <Dropdown.Toggle
         as={ProfileButton}
