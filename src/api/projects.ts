@@ -4,7 +4,7 @@ import { JWTConfig, logoutUser } from "../utils/helper";
 import type { ApiResult, ReturnProject } from "../types";
 
 const authenticatedRequest = async <T>(
-  method: "GET" | "POST",
+  method: "GET" | "POST" | "PUT",
   url: string,
   data?: unknown,
   extraHeaders?: Record<string, string>,
@@ -55,3 +55,37 @@ export const createProjectApi = (payload: {
     API_ENDPOINTS.CREATE_PROJECT,
     payload,
   );
+
+export const getProjectByIdApi = (projectId: number) =>
+  authenticatedRequest<{
+    projectId: number;
+    projectNumber: string;
+    projectName: string;
+    projectDescription?: string;
+    kmlFileUrl?: string;
+    geoJsonFileUrl?: string;
+  }>(
+    "GET",
+    `${API_ENDPOINTS.GET_PROJECT_BY_ID}?projectId=${projectId}`,
+  );
+
+export const getCollectorCodeApi = (projectId: number) =>
+  authenticatedRequest<{ projectId: number; collectorCode: string }>(
+    "GET",
+    `${API_ENDPOINTS.GET_COLLECTOR_CODE}?projectId=${projectId}`,
+  );
+
+export const updateProjectApi = (payload: {
+  projectId: number;
+  projectName?: string;
+  projectDescription?: string;
+  shapeFileName?: string;
+  isLocked?: boolean;
+  isDownloaded?: boolean;
+}) =>
+  authenticatedRequest<{
+    kmlFileUrl?: string;
+    geoJsonFileUrl?: string;
+    projectName?: string;
+    projectDescription?: string;
+  }>("PUT", API_ENDPOINTS.UPDATE_PROJECT, payload);

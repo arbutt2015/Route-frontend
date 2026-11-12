@@ -1,9 +1,11 @@
 import Modal from "react-bootstrap/Modal";
+import { useEffect, useState } from "react";
 import { Container } from "../CreateProject/CreateProjectModal.style";
 import { Button } from "react-bootstrap";
 import { FiCopy } from "react-icons/fi";
 import WebStorage from "../../utils/WebStorage";
 import { toastSuccessMessage } from "../../utils/constant";
+import { getCollectorCodeApi } from "../../api/projects";
 import closeIcon from "../../assets/images/close-icon-btn.png";
 import type { ISelectedProject } from "../../types";
 
@@ -18,7 +20,29 @@ export const RouteCodeModal = ({
 }: IRouteCodeModalProps) => {
   const project =
     WebStorage.getLocalStore<ISelectedProject>("selectedProject");
-  const routeCode = project?.routeCode ?? "ABC123";
+  const [routeCode, setRouteCode] = useState(
+    project?.collectorCode ?? "-----",
+  );
+
+  useEffect(() => {
+    if (!show || !project?.projectId) return;
+    let cancelled = false;
+    const fetchCode = async () => {
+      const res = await getCollectorCodeApi(project.projectId);
+      if (!cancelled && res.success && res.data?.collectorCode) {
+        setRouteCode(res.data.collectorCode);
+        WebStorage.setLocalStore("selectedProject", {
+          ...project,
+          collectorCode: res.data.collectorCode,
+        });
+      }
+    };
+    void fetchCode();
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [show, project?.projectId]);
 
   const handleCopy = async () => {
     try {

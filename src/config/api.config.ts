@@ -13,4 +13,7 @@ export const API_ENDPOINTS = {
   ASSIGN_DEMO_PROJECT: "/auth/assign-demo-project",
   UPLOAD_FILE: "/project/upload-file",
   CREATE_PROJECT: "/project/create",
+  UPDATE_PROJECT: "/project/update",
+  GET_PROJECT_BY_ID: "/project/get-project-by-id",
+  GET_COLLECTOR_CODE: "/project/get-collector-code",
 } as const;

@@ -38,10 +38,16 @@ export const Container = styled.div`
       font-weight: 700;
       font-size: 15px;
       padding: 0;
-      margin-top: 15px;
+      margin-top: 0;
       display: inline-flex;
       align-items: center;
       gap: 4px;
+    }
+    & .upload-kml-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 15px;
     }
     & .upload-kml-file-name {
       font-size: 13px;

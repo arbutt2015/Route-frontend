@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import GoogleMapReact from "google-map-react";
 import { MapContainer } from "./Map.style";
 import { MapType } from "../../types";
-import { environment } from "../../config/environment";
+import { environment } from "../../config/";
 import plusIcon from "../../assets/images/plus-road-view.png";
 import minusIcon from "../../assets/images/minu-road-view.png";
 

@@ -1,8 +1,14 @@
 import Modal from "react-bootstrap/Modal";
+import { useState } from "react";
 import { Container } from "../CreateProject/CreateProjectModal.style";
 import { Button } from "react-bootstrap";
 import WebStorage from "../../utils/WebStorage";
-import { toastSuccessMessage } from "../../utils/constant";
+import {
+  toastErrMessage,
+  toastSuccessMessage,
+} from "../../utils/constant";
+import { updateProjectApi } from "../../api/projects";
+import Loader from "../Loader/Loader";
 import closeIcon from "../../assets/images/close-icon-btn.png";
 import type { ISelectedProject } from "../../types";
 
@@ -15,17 +21,35 @@ export const LockProjectModal = ({
   show,
   handleClose,
 }: ILockProjectModalProps) => {
-  const handleLock = () => {
-    const project =
-      WebStorage.getLocalStore<ISelectedProject>("selectedProject");
-    if (project) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const project =
+    WebStorage.getLocalStore<ISelectedProject>("selectedProject");
+  const alreadyLocked = !!project?.isLocked;
+
+  const handleLock = async () => {
+    if (!project) {
+      handleClose();
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      const res = await updateProjectApi({
+        projectId: project.projectId,
+        isLocked: true,
+      });
+      if (!res.success) {
+        toastErrMessage(res.message || "Could not lock the project.");
+        return;
+      }
       WebStorage.setLocalStore("selectedProject", {
         ...project,
         isLocked: true,
       });
       toastSuccessMessage("Project locked successfully.");
+      handleClose();
+    } finally {
+      setIsSubmitting(false);
     }
-    handleClose();
   };
 
   return (
@@ -51,6 +75,16 @@ export const LockProjectModal = ({
           Locked projects will be available to open in the mobile application
           using the Route Code.
         </p>
+        {alreadyLocked && (
+          <p
+            style={{
+              color: "var(--error-message-color)",
+              fontWeight: 600,
+            }}
+          >
+            This project is already locked.
+          </p>
+        )}
         <div className="modal-shell-footer">
           <Button
             type="button"
@@ -63,8 +97,9 @@ export const LockProjectModal = ({
             type="button"
             onClick={handleLock}
             className="modal-shell-submit-btn"
+            disabled={isSubmitting || alreadyLocked}
           >
-            Lock Project
+            {isSubmitting ? <Loader label="" /> : "Lock Project"}
           </Button>
         </div>
       </Container>

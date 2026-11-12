@@ -18,8 +18,10 @@ export interface LoggedInUser {
   userId: number;
   email: string;
   firstName: string;
-  middleInitial?: string;
   lastName: string;
+  userType?: number;
+  agencyId?: number | null;
+  agencyName?: string;
   companyName?: string;
   title?: string;
   phoneNumber?: string;
@@ -31,7 +33,7 @@ export interface LoggedInUser {
 
 export interface ProfileValues {
   firstName: string;
-  middleInitial: string;
+  middleInitial?: string;
   lastName: string;
   companyName: string;
   title: string;
@@ -41,7 +43,12 @@ export interface ProfileValues {
 export interface UserProfile extends ProfileValues {
   userId: number;
   email: string;
-  isPasswordChangeRequired: boolean;
+  agencyId?: number | null;
+  agencyName?: string;
+  userType?: number;
+  isActive?: boolean;
+  dateCreated?: string;
+  dateUpdated?: string;
 }
 
 export interface AuthToken {
@@ -84,34 +91,26 @@ export interface DomainInfo {
 }
 
 export interface ISelectedProject {
-  agencyName: string;
   projectId: number;
   projectName: string;
   projectNumber: string;
   description?: string;
-  projectS3BucketFolderPath: string;
-  geoJsonS3FilePath: string;
-  boundingBox: string[];
-  regions: unknown;
-  projectKmlGeoJson: string;
-  isExportable?: boolean;
+  collectorCode?: string;
+  agencyName?: string;
+  agencyId?: number | null;
+  kmlFileUrl?: string | null;
+  geoJsonS3FilePath?: string | null;
+  userId?: number | null;
   isLocked?: boolean;
-  routeCode?: string;
-  projectDataExportUrl?: string;
-  isEnableLens: boolean;
-  isEnablePlanner: boolean;
-  isEnableAnalytics: boolean;
-  roadViewEnabled?: boolean;
-  viewerEnabled?: boolean;
+  isDownloaded?: boolean;
+  isActive?: boolean;
+  dateCreated?: string;
+  dateUpdated?: string;
 }
 
 export interface ReturnProject {
   project: ISelectedProject;
-  projectUserRoleId: number;
-  roleId: number;
-  isEnableLens: boolean;
-  isEnablePlanner: boolean;
-  isEnableAnalytics: boolean;
+  projectUserId: number;
 }
 
 export interface IProjectModalProps {

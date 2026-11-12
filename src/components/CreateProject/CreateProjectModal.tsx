@@ -133,7 +133,9 @@ export const CreateProjectModal = ({
               <fieldset className="info-panel">
                 <legend>Project Information</legend>
                 <Form.Group>
-                  <Form.Label>Project Number</Form.Label>
+                  <Form.Label className="required">
+                    Project Number
+                  </Form.Label>
                   <Form.Control
                     type="text"
                     name="projectNumber"
@@ -153,7 +155,9 @@ export const CreateProjectModal = ({
                   )}
                 </Form.Group>
                 <Form.Group className="mt-3">
-                  <Form.Label>Project Name</Form.Label>
+                  <Form.Label className="required">
+                    Project Name
+                  </Form.Label>
                   <Form.Control
                     type="text"
                     name="projectName"
@@ -161,6 +165,9 @@ export const CreateProjectModal = ({
                     value={values.projectName}
                     onChange={handleChange}
                     onBlur={() => setFieldTouched("projectName", true)}
+                    isInvalid={
+                      touched.projectName && !!errors.projectName
+                    }
                   />
                   {errors.projectName && touched.projectName && (
                     <div className="validation-error-message">
@@ -191,18 +198,20 @@ export const CreateProjectModal = ({
                     setFieldTouched("uploadShapeFile", true, false);
                   }}
                 />
-                <button
-                  type="button"
-                  className="upload-kml-btn hidden-btn"
-                  onClick={() => fileInputRef.current?.click()}
-                >
-                  + Upload KML File
-                </button>
-                {values.uploadShapeFile && (
-                  <span className="upload-kml-file-name">
-                    {values.uploadShapeFile.name}
-                  </span>
-                )}
+                <div className="upload-kml-row">
+                  <button
+                    type="button"
+                    className="upload-kml-btn hidden-btn required"
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    + Upload KML File
+                  </button>
+                  {values.uploadShapeFile && (
+                    <span className="upload-kml-file-name">
+                      {values.uploadShapeFile.name}
+                    </span>
+                  )}
+                </div>
                 {errors.uploadShapeFile && touched.uploadShapeFile && (
                   <div className="validation-error-message">
                     {errors.uploadShapeFile as string}
