@@ -167,6 +167,7 @@ export const AuthenticatedLayout = ({ actions }: AuthenticatedLayoutProps) => {
         <CreateProjectModal
           show={createProjectOpen}
           handleClose={closeCreateProjectModal}
+          onCreated={openProjectModal}
         />
       )}
     </ApplicationShell>

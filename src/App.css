@@ -5,6 +5,8 @@
 }
 
 .validation-error-message {
+  color: var(--error-message-color);
+  font-size: 0.875em;
   height: 20px !important;
 }
 

@@ -11,4 +11,6 @@ export const API_ENDPOINTS = {
   CHANGE_PASSWORD: "/auth/change-password",
   GET_ASSIGNED_PROJECT: "/project/get-assigned-project",
   ASSIGN_DEMO_PROJECT: "/auth/assign-demo-project",
+  UPLOAD_FILE: "/project/upload-file",
+  CREATE_PROJECT: "/project/create",
 } as const;

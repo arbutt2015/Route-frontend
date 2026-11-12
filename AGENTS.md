@@ -11,6 +11,15 @@
   was **temporarily removed** so `/registration` can be opened directly for UI work.
 - **When registration implementation is revisited, restore this guard** (redirects to `/login` when no email was stored from the login Register step), matching `manager2.0-frontend` behavior.
 
+## Pending feature: KML/GeoJSON on map
+
+- When a project is opened, load its GeoJSON (`GEOJSON_FILE_URL` → `project.geoJsonS3FilePath`
+  in the `get-assigned-project` response) from S3 and render it on `src/components/Map/Map.tsx`
+  + fit map bounds to the geometry.
+- Project creation already converts the uploaded KML to GeoJSON and stores it in S3
+  (`project.service.ts` `createProject` → `convertKmlToGeoJson`); only the frontend
+  map rendering is deferred.
+
 ## Workflow notes
 
 - Authentication uses the existing route-backend Cognito endpoints. Successful login stores the returned user in storage and Redux, then navigates directly to Dashboard; do not restore the manager-only project-assignment API call or modal flags.

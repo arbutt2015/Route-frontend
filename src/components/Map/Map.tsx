@@ -6,6 +6,9 @@ import { environment } from "../../config/environment";
 import plusIcon from "../../assets/images/plus-road-view.png";
 import minusIcon from "../../assets/images/minu-road-view.png";
 
+// TODO: load selected project's GeoJSON (GEOJSON_FILE_URL / geoJsonS3FilePath)
+// from S3 and render it on the map + fit bounds. Deferred — map currently
+// renders a fixed default view only.
 const defaultProps = {
   center: {
     lat: 38.5,
