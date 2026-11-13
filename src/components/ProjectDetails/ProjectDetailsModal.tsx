@@ -64,6 +64,7 @@ export const ProjectDetailsModal = ({
   );
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const isDownloaded = !!project?.isDownloaded;
 
   return (
     <Modal
@@ -218,6 +219,7 @@ export const ProjectDetailsModal = ({
                     isInvalid={
                       touched.projectName && !!errors.projectName
                     }
+                    disabled={isDownloaded}
                   />
                   {errors.projectName && touched.projectName && (
                     <div className="validation-error-message">
@@ -233,6 +235,7 @@ export const ProjectDetailsModal = ({
                     name="description"
                     value={values.description}
                     onChange={handleChange}
+                    disabled={isDownloaded}
                   />
                 </Form.Group>
                 <div className="upload-kml-row">
@@ -241,6 +244,7 @@ export const ProjectDetailsModal = ({
                     ref={fileInputRef}
                     accept=".kml"
                     hidden
+                    disabled={isDownloaded}
                     onChange={(e) => {
                       setFieldValue(
                         "uploadShapeFile",
@@ -252,6 +256,7 @@ export const ProjectDetailsModal = ({
                   <button
                     type="button"
                     className="upload-kml-btn hidden-btn"
+                    disabled={isDownloaded}
                     onClick={() => fileInputRef.current?.click()}
                   >
                     <FaPlus size={12} /> Upload KML File
@@ -285,6 +290,19 @@ export const ProjectDetailsModal = ({
                     {errors.uploadShapeFile as string}
                   </div>
                 )}
+                {isDownloaded && (
+                  <p
+                    style={{
+                      color: "var(--error-message-color)",
+                      fontWeight: 600,
+                      marginTop: "10px",
+                      marginBottom: 0,
+                    }}
+                  >
+                    The project data is being used by the mobile application
+                    for collection and it cannot be edited.
+                  </p>
+                )}
               </fieldset>
               <div className="modal-shell-footer">
                 <Button
@@ -297,7 +315,7 @@ export const ProjectDetailsModal = ({
                 <Button
                   type="submit"
                   className="modal-shell-submit-btn"
-                  disabled={isSubmitting || !isDirty}
+                  disabled={isSubmitting || !isDirty || isDownloaded}
                 >
                   {isSubmitting ? <Loader label="" /> : "Update Project"}
                 </Button>
